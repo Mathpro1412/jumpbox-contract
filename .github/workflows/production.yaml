@@ -32,9 +32,9 @@ jobs:
               echo "-----------------"
               docker images
               echo "-----------------"
-              docker tag ${{ steps.get_image_name.outputs.result }} ${{ secrets.DOCKERHUB_USERNAME }}/:1.0.0
+              docker tag ${{ steps.get_image_name.outputs.result }} ${{ secrets.DOCKERHUB_USERNAME }}/nodejs-api:latest
               docker images
               echo "-----------------"
-              docker push ${{ secrets.DOCKERHUB_USERNAME }}/:1.0.0
+              docker push ${{ secrets.DOCKERHUB_USERNAME }}/nodejs-api:latest
               echo "-----------------"
               echo "docker retag success"
