@@ -1,48 +1,37 @@
-# This workflow will do a clean installation of node dependencies, cache/restore them, build the source code and run tests across different versions of node
-# For more information see: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-nodejs
-
-name: main
+name: "production"
 
 on:
-  push:
-    branches: [ "main" ]
-  # pull_request:
-  #   branches: [ "main" ]
-
+  workflow_dispatch:
+  pull_request:
+    branches:
+      - main
 
 jobs:
-  build-docker-image:
-
-    runs-on: ubuntu-latest
-    defaults:
-      run:
-        working-directory: ./hand-on # Here the path to the folder where package-lock.json is located.
-    permissions:
-      contents: write
-    strategy:
-      matrix:
-        node-version: [14.x]
-    #    node-version: [14.x, 16.x, 18.x]
-        # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
+  deploy-production:
+    runs-on: self-hosted
+    environment: production
 
     steps:
-    - uses: actions/checkout@v3
-    - name: pwd 0
-      run: pwd
+      - name: Checkout repository
+        uses: actions/checkout@v3
 
-    - name: Login to Docker Hub
-      uses: docker/login-action@v3
-      with:
-        username: ${{ secrets.DOCKERHUB_USERNAME }}
-        password: ${{ secrets.DOCKERHUB_TOKEN }}
-    - name: Retag Container Image
-      id: retag
-      env:
-        APP_IMAGE: ${{ vars.APP_IMAGE }}
-      working-directory: ./manifest/dev
-      run: |
-        IMAGE_SOURCE=$(yq eval '.spec.template.spec.containers.[0].image' hand-on/manifest/production/deployment.yaml)
-        docker pull $IMAGE_SOURCE
-        IMAGE_TOCHANGE=${APP_IMAGE}:${GITHUB_RUN_ID}
-        docker tag $IMAGE_SOURCE $IMAGE_TOCHANGE
-        docker push $IMAGE_TOCHANGE
+      - name: Login to Docker Hub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
+
+      - name: Retag Container Image
+        id: retag
+        env:
+          APP_IMAGE: ${{ vars.APP_IMAGE }}
+        working-directory: ./manifest/dev
+        run: |
+          IMAGE_SOURCE=$(yq eval '.spec.template.spec.containers[0].image' deployment.yaml)
+          docker pull $IMAGE_SOURCE
+
+          IMAGE_TOCHANGE=${APP_IMAGE}:${GITHUB_RUN_ID}
+          echo "IMAGE_TOCHANGE=${IMAGE_TOCHANGE}" >> $GITHUB_OUTPUT
+
+          docker tag $IMAGE_SOURCE $IMAGE_TOCHANGE
+          docker push $IMAGE_TOCHANGE
