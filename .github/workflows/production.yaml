@@ -39,6 +39,7 @@ jobs:
       id: retag
       env:
         APP_IMAGE: ${{ vars.APP_IMAGE }}
+      working-directory: ./manifest/dev
       run: |
         IMAGE_SOURCE=$(yq eval '.spec.template.spec.containers.[0].image' hand-on/manifest/production/deployment.yaml)
         docker pull $IMAGE_SOURCE
