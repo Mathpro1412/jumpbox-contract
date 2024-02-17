@@ -16,7 +16,7 @@ spec:
         app: hello-node-prod
     spec:
       containers:
-        - image: ""
+        - image: "anonja/nodejs-api:latest"
           name: hello-node-prod
           resources: {}
 status: {}
