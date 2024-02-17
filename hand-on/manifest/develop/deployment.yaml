@@ -16,7 +16,7 @@ spec:
         app: hello-node
     spec:
       containers:
-        - image: anonja/nodejs-api:74b5fc
+        - image: anonja/nodejs-api:f4be80
           name: hello-node
           resources: {}
 status: {}
