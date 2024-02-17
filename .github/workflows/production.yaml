@@ -56,6 +56,6 @@ jobs:
           run: |
             git config user.name "GitHub Action"
             git config user.email "github-actions@users.noreply.github.com"
-            git add manifest/develop/*
+            git add manifest/production/*
             git commit -m "bot: Update manifest"
             git push
