@@ -5,9 +5,17 @@ on:
     branches: [ "main" ]
 
 jobs:
-  deploy-production:
-    runs-on: self-hosted
-    environment: production
+  build-docker-image:
+
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./hand-on # Here the path to the folder where package-lock.json is located.
+    permissions:
+      contents: write
+    strategy:
+      matrix:
+        node-version: [14.x]
 
     steps:
       - name: Checkout repository
