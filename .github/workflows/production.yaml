@@ -45,7 +45,7 @@ jobs:
           id: get_username
           uses: mikefarah/yq@master
           with:
-            cmd: yq -i '.spec.template.spec.containers.[0].image = ${{ secrets.DOCKERHUB_USERNAME }}/nodejs-api:latest' hand-on/manifest/production/deployment.yaml
+            cmd: yq -i '.spec.template.spec.containers.[0].image = "${{ secrets.DOCKERHUB_USERNAME }}/nodejs-api:latest"' hand-on/manifest/production/deployment.yaml
         - name: update dev manifest
           run: |
             git config user.name "GitHub Action"
