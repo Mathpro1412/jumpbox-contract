@@ -39,9 +39,8 @@ jobs:
       id: retag
       env:
         APP_IMAGE: ${{ vars.APP_IMAGE }}
-      working-directory: ./manifest/production
       run: |
-        IMAGE_SOURCE=$(yq eval '.spec.template.spec.containers[0].image' deployment.yaml)
+        IMAGE_SOURCE=$(yq eval '.spec.template.spec.containers[0].image' hand-on/manifest/production/deployment.yaml)
         docker pull $IMAGE_SOURCE
         IMAGE_TOCHANGE=${APP_IMAGE}:${GITHUB_RUN_ID}
         docker tag $IMAGE_SOURCE $IMAGE_TOCHANGE
