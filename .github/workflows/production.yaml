@@ -53,3 +53,11 @@ jobs:
             git add manifest/production/*
             git commit -m "bot: Update manifest"
             git push
+        - name: start minikube
+          id: minikube
+          uses: medyagh/setup-minikube@master
+        - name: deploy app in minikube
+          run: |
+            cd manifest
+            cd production
+            kubectl apply -f deployment.yaml
