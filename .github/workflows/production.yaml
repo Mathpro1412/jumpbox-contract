@@ -1,11 +1,11 @@
 name: "production"
 
 on:
-    push:
-     branches: [ "main" ]
-    # pull_request:
-    #   branches: [ "main" ]
-    #   types: [closed]
+    # push:
+    #  branches: [ "main" ]
+    pull_request:
+      branches: [ "main" ]
+      types: [closed]
 env:
     GITHUB_PR_NUMBER: ${{github.event.pull_request.number}}
 jobs:
