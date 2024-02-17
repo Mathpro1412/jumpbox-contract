@@ -1,0 +1,69 @@
+# This workflow will do a clean installation of node dependencies, cache/restore them, build the source code and run tests across different versions of node
+# For more information see: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-nodejs
+
+name: develop
+
+on:
+  push:
+    branches: [ "develop" ]
+  # pull_request:
+  #   branches: [ "main" ]
+
+# env:
+#   CLUSTER_NAME: https://tcc-01.th1.proen.cloud/api/
+
+jobs:
+  build-docker-image:
+
+    runs-on: ubuntu-latest
+    # defaults:
+    #   run:
+    #     working-directory: ./javascript # Here the path to the folder where package-lock.json is located.
+    permissions:
+      contents: write
+    strategy:
+      matrix:
+        node-version: [14.x]
+    #    node-version: [14.x, 16.x, 18.x]
+        # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
+
+    steps:
+    - uses: actions/checkout@v3
+    - name: pwd 0
+      run: pwd
+    - uses: benjlevesque/short-sha@v2.2
+      id: short-sha
+      with:
+        length: 6
+    - run: echo $SHA
+      env:
+        SHA: ${{ steps.short-sha.outputs.sha }}
+    - run: echo $SHA
+      env:
+        SHA: ${{  env.SHA }}
+    # - name: Get an entry with a variable that might contain dots or spaces
+    #   id: get_username
+    #   uses: mikefarah/yq@master
+    #   with:
+    #     cmd: yq -i '.spec.template.spec.containers.[0].image = "anonja/nodejs-api-ci:${{ env.SHA }}"' javascript/manifest/dev/deployment.yaml
+    # - name: images Dev
+    #   run: cat /home/runner/work/week-9-TCC231005/week-9-TCC231005/javascript/manifest/dev/deployment.yaml
+    # - name: update dev manifest
+    #   run: |
+    #     git config user.name "GitHub Action"
+    #     git config user.email "github-actions@users.noreply.github.com"
+    #     git add manifest/dev/*
+    #     git commit -m "Update manifest"
+    #     git push
+
+    - name: Login to Docker Hub
+      uses: docker/login-action@v3
+      with:
+        username: ${{ secrets.DOCKERHUB_USERNAME }}
+        password: ${{ secrets.DOCKERHUB_TOKEN }}
+    - name: Build and push
+      uses: docker/build-push-action@v5
+      with:
+        # context: ./javascript
+        push: true
+        tags: anonja/nodejs-api-ci:${{ env.SHA }}
