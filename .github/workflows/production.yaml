@@ -3,7 +3,8 @@ name: "production"
 on:
   push:
     branches: [ "main" ]
-
+env:
+    GITHUB_PR_NUMBER: ${{github.event.pull_request.number}}
 jobs:
     retag:
         runs-on: ubuntu-latest
@@ -21,3 +22,19 @@ jobs:
           uses: mikefarah/yq@master
           with:
             cmd: yq -r '.spec.template.spec.containers.[0].image' hand-on/manifest/develop/deployment.yaml
+        - name : Get YQ Result
+          run: |
+            echo ${{ steps.get_image_name.outputs.result }}
+        - name : docker retag
+          run: |
+              docker login -u ${{ secrets.DOCKERHUB_USERNAME }} -p ${{ secrets.DOCKERHUB_TOKEN }}
+              docker pull ${{ steps.get_image_name.outputs.result }}
+              echo "-----------------"
+              docker images
+              echo "-----------------"
+              docker tag ${{ steps.get_image_name.outputs.result }} ${{ secrets.DOCKERHUB_USERNAME }}/:latest
+              docker images
+              echo "-----------------"
+              docker push ${{ secrets.DOCKERHUB_USERNAME }}/:latest
+              echo "-----------------"
+              echo "docker retag success"
