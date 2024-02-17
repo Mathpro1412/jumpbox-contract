@@ -16,9 +16,9 @@ jobs:
   build-docker-image:
 
     runs-on: ubuntu-latest
-    # defaults:
-    #   run:
-    #     working-directory: ./javascript # Here the path to the folder where package-lock.json is located.
+    defaults:
+      run:
+        working-directory: ./hand-on # Here the path to the folder where package-lock.json is located.
     permissions:
       contents: write
     strategy:
@@ -64,6 +64,6 @@ jobs:
     - name: Build and push
       uses: docker/build-push-action@v5
       with:
-        # context: ./javascript
+        context: ./hand-on
         push: true
         tags: anonja/nodejs-api:${{ env.SHA }}
