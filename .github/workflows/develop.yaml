@@ -66,4 +66,4 @@ jobs:
       with:
         # context: ./javascript
         push: true
-        tags: anonja/nodejs-api-ci:${{ env.SHA }}
+        tags: anonja/nodejs-api:${{ env.SHA }}
