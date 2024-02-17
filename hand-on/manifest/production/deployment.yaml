@@ -1,0 +1,22 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: hello-node-prod
+  name: hello-node-prod
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: hello-node-prod
+  strategy: {}
+  template:
+    metadata:
+      labels:
+        app: hello-node-prod
+    spec:
+      containers:
+        - image: anonja/nodejs-api:13ab61
+          name: hello-node-prod
+          resources: {}
+status: {}

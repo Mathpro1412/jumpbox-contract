@@ -9,8 +9,6 @@ on:
   # pull_request:
   #   branches: [ "main" ]
 
-# env:
-#   CLUSTER_NAME: https://tcc-01.th1.proen.cloud/api/
 
 jobs:
   build-docker-image:
@@ -41,20 +39,20 @@ jobs:
     - run: echo $SHA
       env:
         SHA: ${{  env.SHA }}
-    # - name: Get an entry with a variable that might contain dots or spaces
-    #   id: get_username
-    #   uses: mikefarah/yq@master
-    #   with:
-    #     cmd: yq -i '.spec.template.spec.containers.[0].image = "anonja/nodejs-api-ci:${{ env.SHA }}"' javascript/manifest/dev/deployment.yaml
+    - name: Get an entry with a variable that might contain dots or spaces
+      id: get_username
+      uses: mikefarah/yq@master
+      with:
+        cmd: yq -i '.spec.template.spec.containers.[0].image = "anonja/nodejs-api:${{ env.SHA }}"' hand-on/manifest/develop/deployment.yaml
     # - name: images Dev
     #   run: cat /home/runner/work/week-9-TCC231005/week-9-TCC231005/javascript/manifest/dev/deployment.yaml
-    # - name: update dev manifest
-    #   run: |
-    #     git config user.name "GitHub Action"
-    #     git config user.email "github-actions@users.noreply.github.com"
-    #     git add manifest/dev/*
-    #     git commit -m "Update manifest"
-    #     git push
+    - name: update dev manifest
+      run: |
+        git config user.name "GitHub Action"
+        git config user.email "github-actions@users.noreply.github.com"
+        git add manifest/develop/*
+        git commit -m "bot: Update manifest"
+        git push
 
     - name: Login to Docker Hub
       uses: docker/login-action@v3
@@ -67,3 +65,11 @@ jobs:
         context: ./hand-on
         push: true
         tags: anonja/nodejs-api:${{ env.SHA }}
+    - name: start minikube
+      id: minikube
+      uses: medyagh/setup-minikube@master
+    - name: deploy app in minikube
+      run: |
+        cd manifest
+        cd develop
+        kubectl apply -f deployment.yaml
