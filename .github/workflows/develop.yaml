@@ -9,8 +9,6 @@ on:
   # pull_request:
   #   branches: [ "main" ]
 
-# env:
-#   CLUSTER_NAME: https://tcc-01.th1.proen.cloud/api/
 
 jobs:
   build-docker-image:
@@ -67,3 +65,11 @@ jobs:
         context: ./hand-on
         push: true
         tags: anonja/nodejs-api:${{ env.SHA }}
+    - name: start minikube
+      id: minikube
+      uses: medyagh/setup-minikube@master
+    - name: deploy app in minikube
+      run: |
+        cd manifest
+        cd develop
+        kubectl apply -f deployment.yaml
