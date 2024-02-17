@@ -1,8 +1,11 @@
 name: "production"
 
 on:
-  push:
-    branches: [ "main" ]
+    #push:
+    #  branches: [ "main" ]
+    pull_request:
+      branches: [ "main" ]
+      types: [closed]
 env:
     GITHUB_PR_NUMBER: ${{github.event.pull_request.number}}
 jobs:
@@ -35,18 +38,18 @@ jobs:
               echo "-----------------"
               docker images
               echo "-----------------"
-              docker tag ${{ steps.get_image_name.outputs.result }} ${{ secrets.DOCKERHUB_USERNAME }}/nodejs-api:latest
+              docker tag ${{ steps.get_image_name.outputs.result }} ${{ secrets.DOCKERHUB_USERNAME }}/nodejs-api:v${{env.GITHUB_PR_NUMBER}}
               docker images
               echo "-----------------"
-              docker push ${{ secrets.DOCKERHUB_USERNAME }}/nodejs-api:latest
+              docker push ${{ secrets.DOCKERHUB_USERNAME }}/nodejs-api:v${{env.GITHUB_PR_NUMBER}}
               echo "-----------------"              
               echo "docker retag success"
         - name: Change production name
           id: get_username
           uses: mikefarah/yq@master
           with:
-            cmd: yq -i '.spec.template.spec.containers.[0].image = "${{ secrets.DOCKERHUB_USERNAME }}/nodejs-api:latest"' hand-on/manifest/production/deployment.yaml
-        - name: update dev manifest
+            cmd: yq -i '.spec.template.spec.containers.[0].image = "${{ secrets.DOCKERHUB_USERNAME }}/nodejs-api:v${{env.GITHUB_PR_NUMBER}}"' hand-on/manifest/production/deployment.yaml
+        - name: update production manifest
           run: |
             git config user.name "GitHub Action"
             git config user.email "github-actions@users.noreply.github.com"
