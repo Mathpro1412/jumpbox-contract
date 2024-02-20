@@ -13,7 +13,7 @@ spec:
         app: hello-node
     spec:
       containers:
-      - name: anonja/nodejs-api:f4be80
+      - name: hello-node
         image: nginx:latest
         ports:
         - containerPort: 80
