@@ -2,14 +2,12 @@ apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   name: hello-node-prod-ingress
-  annotations:
-    nginx.ingress.kubernetes.io/rewrite-target: /
 spec:
   rules:
     - http:
         paths:
-          - path: /
-            pathType: Prefix
+          - pathType: Prefix
+            path: /
             backend:
               service:
                 name: hello-node-prod-service
