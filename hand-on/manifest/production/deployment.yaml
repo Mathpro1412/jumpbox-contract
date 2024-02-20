@@ -1,22 +1,19 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  labels:
-    app: hello-node-prod
-  name: hello-node-prod
+  name: hello-node-prod-deployment
 spec:
-  replicas: 1
+  replicas: 3
   selector:
     matchLabels:
       app: hello-node-prod
-  strategy: {}
   template:
     metadata:
       labels:
         app: hello-node-prod
     spec:
       containers:
-        - image: "anonja/nodejs-api:v2"
-          name: hello-node-prod
-          resources: {}
-status: {}
+      - name: hello-node-prod
+        image: anonja/nodejs-api:v2
+        ports:
+        - containerPort: 80
