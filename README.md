@@ -1,4 +1,4 @@
-# HOW TO RUN
+<!-- # HOW TO RUN
 
 ```bash
 node server.js
@@ -14,4 +14,4 @@ or
 
 ```
 curl "http://localhost:3000/greeting?name=John"
-```
+``` -->
