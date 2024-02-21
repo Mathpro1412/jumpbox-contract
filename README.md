@@ -1,17 +1,11 @@
-<!-- # HOW TO RUN
+# QUESTION
 
-```bash
-node server.js
-```
+# Hand-Lab
+1. install minikube
+2. kubectl apply -f deployment.yaml -f service.yaml -f ingress.yaml
+3. minikube service service-name --url
 
-# HOW TO TEST
+# Algorithms
 
-```
-curl http://localhost:3000/greeting
-```
-
-or
-
-```
-curl "http://localhost:3000/greeting?name=John"
-``` -->
+1. install node
+2. node file-name.js
