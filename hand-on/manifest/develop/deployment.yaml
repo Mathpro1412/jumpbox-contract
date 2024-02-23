@@ -15,5 +15,11 @@ spec:
       containers:
       - name: hello-node
         image: anonja/nodejs-api:f4be80
+        env:
+        - name: ENV1
+          valueFrom:
+            configMapKeyRef:
+              name: hello-node-configmap
+              key: greeting
         ports:
         - containerPort: 80
