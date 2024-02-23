@@ -21,5 +21,15 @@ spec:
             configMapKeyRef:
               name: hello-node-configmap
               key: greeting
+        - name: USERNAME
+          valueFrom:
+            secretKeyRef:
+              name: hello-node-secret
+              key: username
+        - name: PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: hello-node-secret
+              key: password
         ports:
         - containerPort: 80
