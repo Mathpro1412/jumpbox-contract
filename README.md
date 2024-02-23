@@ -2,7 +2,7 @@
 
 # Hand-Lab
 1. install minikube
-2. kubectl apply -f deployment.yaml -f service.yaml -f ingress.yaml
+2. kubectl apply -f deployment.yaml -f service.yaml -f ingress.yaml -f configmap.yaml -f secret.yaml
 3. minikube service service-name --url
 
 # Algorithms
